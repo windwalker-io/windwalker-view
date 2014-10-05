@@ -1,19 +1,19 @@
 <?php
 /**
- * Part of formosa project. 
+ * Part of Windwalker project.
  *
- * @copyright  Copyright (C) 2011 - 2014 SMS Taiwan, Inc. All rights reserved.
- * @license    GNU General Public License version 2 or later; see LICENSE
+ * @copyright  Copyright (C) 2008 - 2014 Asikart.com. All rights reserved.
+ * @license    GNU General Public License version 2 or later;
  */
 
 namespace Windwalker\View;
 
 /**
- * Class AbstractHtmlView
+ * Class HtmlView
  *
- * @since 1.0
+ * @since {DEPLOY_VERSION}
  */
-class AbstractHtmlView extends AbstractView
+class SimpleHtmlView extends AbstractView
 {
 	/**
 	 * Property layout.
@@ -30,7 +30,7 @@ class AbstractHtmlView extends AbstractView
 	 * @return  string  The escaped output.
 	 *
 	 * @see     ViewInterface::escape()
-	 * @since   1.0
+	 * @since   {DEPLOY_VERSION}
 	 */
 	public function escape($output)
 	{
@@ -43,7 +43,7 @@ class AbstractHtmlView extends AbstractView
 	 *
 	 * @return  string  The rendered view.
 	 *
-	 * @since   1.0
+	 * @since   {DEPLOY_VERSION}
 	 * @throws  \RuntimeException
 	 */
 	public function render()
@@ -57,11 +57,18 @@ class AbstractHtmlView extends AbstractView
 			throw new \RuntimeException(sprintf('Layout: %s Not Found', $layout));
 		}
 
+		if (!is_file($layout))
+		{
+			throw new \RuntimeException(sprintf('Layout: %s not found.', $layout));
+		}
+
+		$data = $this->data;
+
 		// Start an output buffer.
 		ob_start();
 
 		// Load the layout.
-		include realpath($layout);
+		include $layout;
 
 		// Get the layout contents.
 		$output = ob_get_clean();
@@ -84,7 +91,7 @@ class AbstractHtmlView extends AbstractView
 	 *
 	 * @param   string $layout
 	 *
-	 * @return  AbstractHtmlView  Return self to support chaining.
+	 * @return  static  Return self to support chaining.
 	 */
 	public function setLayout($layout)
 	{
@@ -93,4 +100,3 @@ class AbstractHtmlView extends AbstractView
 		return $this;
 	}
 }
- 
